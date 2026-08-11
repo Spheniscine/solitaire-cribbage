@@ -37,6 +37,7 @@ pub enum SuitSkin {
     Animals,
     Shapes,
     Traditional,
+    None,
 }
 
 impl SuitSkin {
@@ -66,6 +67,9 @@ impl SuitSkin {
                     Suit::Spades => "♠",
                 }
             }
+            SuitSkin::None => {
+                ""
+            }
         }
     }
 
@@ -74,6 +78,7 @@ impl SuitSkin {
             SuitSkin::Animals => "'Noto Color Emoji'",
             SuitSkin::Shapes => "'Noto Sans Symbols 2'",
             SuitSkin::Traditional => "KaTeX_Suits", // links to custom version of Katex/MLModern that has filled card suits
+            SuitSkin::None => "serif"
         }
     }
 }
