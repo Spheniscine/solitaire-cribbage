@@ -5,7 +5,7 @@ use serde_tuple::{Deserialize_tuple, Serialize_tuple};
 use strum::{IntoEnumIterator, VariantArray};
 use strum_macros::{EnumIter, VariantArray};
 
-use crate::game::Card;
+use crate::game::{Card, DECK_SIZE};
 
 #[derive(Copy, Clone, Serialize, Deserialize, Debug, PartialEq, Eq, EnumIter, VariantArray)]
 #[repr(u8)]
@@ -116,6 +116,7 @@ impl RankScore {
 
 #[derive(Copy, Clone, Serialize, Deserialize, Debug, PartialEq, Eq, Default)]
 pub struct ScoreBoard {
+    pub total: u8,
     pub stack_score: Option<StackScore>,
     pub rank_score: Option<RankScore>,
     pub score: i32,
@@ -126,4 +127,52 @@ pub struct Board {
     pub depots: Vec<Vec<Card>>,
     pub score_board: ScoreBoard,
     pub animation_acts: Vec<AnimationAct>,
+}
+
+impl Board {
+    pub fn empty() -> Self {
+        Self {
+            depots: vec![vec![]; NUM_DEPOTS],
+            score_board: ScoreBoard::default(),
+            animation_acts: vec![],
+        }
+    }
+
+    pub fn from_deal(deal: &[Card]) -> Self {
+        use DepotRole::*;
+        assert_eq!(deal.len(), DECK_SIZE);
+
+        let mut res = Self::empty();
+        let range = Tableau.range();
+        for (&card, depot) in deal.iter().zip(std::iter::repeat(range).flatten()) {
+            res.depots[depot].push(card);
+        }
+
+        res
+    }
+
+    pub fn do_move(&mut self, pos1: BoardPos, pos2: BoardPos) {
+        let cards = self.depots[pos1.depot_index].drain(pos1.card_index ..).collect();
+        self.animation_acts.push(
+            AnimationAct::Move(cards, pos1, pos2)
+        );
+    }
+
+    pub fn advance_actions(&mut self) {
+        for act in self.animation_acts.drain(..) {
+            match act {
+                AnimationAct::Move(cards, _pos1, pos2) => {
+                    self.depots[pos2.depot_index].extend(cards);
+                },
+            }
+        }
+    }
+
+    pub fn top_pos(&self, depot: usize) -> BoardPos {
+        BoardPos::new(depot, self.depots[depot].len())
+    }
+
+    pub fn last_pos(&self, depot: usize) -> BoardPos {
+        BoardPos::new(depot, self.depots[depot].len().wrapping_sub(1))
+    }
 }

@@ -1,4 +1,4 @@
-use crate::game::{BitMask, Card, RANK_JACK, RankScore, ScoreBoard};
+use crate::game::{BitMask, Board, BoardPos, Card, DepotRole, RANK_JACK, RankScore, ScoreBoard};
 
 use super::StackScore;
 
@@ -8,12 +8,12 @@ pub fn stack_total(stack: &[Card]) -> u8 {
 
 impl ScoreBoard {
     pub fn score(&mut self, stack: &[Card]) {
-        let total = stack_total(stack);
+        self.total = stack_total(stack);
         if stack.len() == 1 && stack[0].rank == RANK_JACK {
             self.stack_score = Some(StackScore::Jack);
-        } else if total == 15 {
+        } else if self.total == 15 {
             self.stack_score = Some(StackScore::Total15);
-        } else if total == 31 {
+        } else if self.total == 31 {
             self.stack_score = Some(StackScore::Total31);
         } else {
             self.stack_score = None;
@@ -43,5 +43,26 @@ impl ScoreBoard {
             }
         }
         if let Some(s) = self.rank_score { self.score += s.value(); }
+    }
+}
+
+pub const STACK_LIMIT: u8 = 31;
+
+impl Board {
+    pub fn update_score(&mut self) {
+        self.score_board.score(&self.depots[DepotRole::Stack.id(0)]);
+    }
+    pub fn is_playable(&self, pos: BoardPos) -> bool {
+        let Some((role, index)) = DepotRole::role_and_subindex(pos.depot_index) else {return false};
+        match role {
+            DepotRole::Tableau => {
+                let depot = &self.depots[pos.depot_index];
+                !depot.is_empty() && pos.card_index == depot.len() - 1 && 
+                    self.score_board.total + depot[pos.card_index].value() <= STACK_LIMIT
+            },
+            DepotRole::Stack => false,
+            DepotRole::Discard => DepotRole::Tableau.range().any(|i| !self.depots[i].is_empty()) && 
+                DepotRole::Tableau.range().all(|i| !self.is_playable(self.last_pos(i))),
+        }
     }
 }
