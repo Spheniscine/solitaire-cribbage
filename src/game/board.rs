@@ -5,6 +5,8 @@ use serde_tuple::{Deserialize_tuple, Serialize_tuple};
 use strum::{IntoEnumIterator, VariantArray};
 use strum_macros::{EnumIter, VariantArray};
 
+use crate::game::Card;
+
 #[derive(Copy, Clone, Serialize, Deserialize, Debug, PartialEq, Eq, EnumIter, VariantArray)]
 #[repr(u8)]
 pub enum DepotRole {
@@ -66,4 +68,62 @@ impl DepotRole {
     pub fn is_face_up(self) -> bool {
         self != DepotRole::Discard
     }
+}
+
+#[derive(Copy, Clone, Serialize_tuple, Deserialize_tuple, Debug, PartialEq, Eq)]
+pub struct BoardPos {
+    pub depot_index: usize,
+    pub card_index: usize,
+}
+
+impl BoardPos {
+    pub fn new(depot_index: usize, card_index: usize) -> Self {
+        Self { depot_index, card_index }
+    }
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub enum AnimationAct {
+    Move(Vec<Card>, BoardPos, BoardPos),
+}
+
+#[derive(Copy, Clone, Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub enum StackScore {
+    Jack, Total15, Total31,
+}
+
+impl StackScore {
+    pub fn value(self) -> i32 {
+        2
+    }
+}
+
+#[derive(Copy, Clone, Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub enum RankScore {
+    Kind(usize), Run(usize),
+}
+
+impl RankScore {
+    pub fn value(self) -> i32 {
+        match self {
+            RankScore::Kind(x) => match x {
+                2 => 2, 3 => 6, 4 => 12, _ => 0
+            },
+            RankScore::Run(x) => x as _,
+        }
+    }
+}
+
+#[derive(Copy, Clone, Serialize, Deserialize, Debug, PartialEq, Eq, Default)]
+pub struct ScoreBoard {
+    pub stack_score: Option<StackScore>,
+    pub rank_score: Option<RankScore>,
+    pub score: i32,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub struct Board {
+    pub depots: Vec<Vec<Card>>,
+    pub score_board: ScoreBoard,
+    pub animation_acts: Vec<AnimationAct>,
 }
