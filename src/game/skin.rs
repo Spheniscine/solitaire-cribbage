@@ -77,11 +77,13 @@ impl SuitSkin {
         match self {
             SuitSkin::Animals => "'Noto Color Emoji'",
             SuitSkin::Shapes => "'Noto Sans Symbols 2'",
-            SuitSkin::Traditional => "KaTeX_Suits", // links to custom version of Katex/MLModern that has filled card suits
+            SuitSkin::Traditional => KATEX_SUITS_FONT_STR, // links to custom version of Katex/MLModern that has filled card suits
             SuitSkin::None => "serif"
         }
     }
 }
+
+pub const KATEX_SUITS_FONT_STR: &str = "KaTeX_Suits";
 
 const COLOR_AMBER: [&str; 2] = ["#b70", "#ffb433"];
 const COLOR_GREEN: [&str; 2] = ["#062", "#00ff55"];

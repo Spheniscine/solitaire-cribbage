@@ -1,5 +1,10 @@
 use dioxus::prelude::*;
 
+use crate::components::Hero;
+
+mod game;
+mod components;
+
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 
 // altered version of KaTeX_Main to include filled "red" suits
@@ -8,11 +13,9 @@ const KATEX_SUITS: Asset = asset!("/assets/KaTeX_Suits.woff2");
 // from https://www.confettijs.org/
 const CONFETTI_JS: Asset = asset!("/assets/confetti.min.js");
 
-const MAIN_CSS: Asset = asset!("/assets/main.css");
-const HEADER_SVG: Asset = asset!("/assets/header.svg");
-
-mod game;
-mod components;
+// string inclusion is used to prevent FOUC;
+const _RAND_RECOMPILE: u64 = 0x4a2a5cf9126cd711; // comment and uncomment to force recompilation
+const MAIN_CSS: &str = const_css_minify::minify!("../assets/main.css");
 
 fn main() {
     dioxus::launch(App);
@@ -35,7 +38,7 @@ fn App() -> Element {
             rel: "stylesheet",
         }
         document::Link { rel: "icon", href: FAVICON }
-        document::Link { rel: "stylesheet", href: MAIN_CSS }
+        document::Style {{MAIN_CSS}}
         document::Style {
             r#"
             @font-face {{
@@ -49,23 +52,5 @@ fn App() -> Element {
         document::Script { src: CONFETTI_JS }
         Hero {}
 
-    }
-}
-
-#[component]
-pub fn Hero() -> Element {
-    rsx! {
-        div {
-            id: "hero",
-            img { src: HEADER_SVG, id: "header" }
-            div { id: "links",
-                a { href: "https://dioxuslabs.com/learn/0.6/", "📚 Learn Dioxus" }
-                a { href: "https://dioxuslabs.com/awesome", "🚀 Awesome Dioxus" }
-                a { href: "https://github.com/dioxus-community/", "📡 Community Libraries" }
-                a { href: "https://github.com/DioxusLabs/sdk", "⚙️ Dioxus Development Kit" }
-                a { href: "https://marketplace.visualstudio.com/items?itemName=DioxusLabs.dioxus", "💫 VSCode Extension" }
-                a { href: "https://discord.gg/XgGxMSkvUM", "👋 Community Discord" }
-            }
-        }
     }
 }
