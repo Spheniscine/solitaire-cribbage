@@ -100,9 +100,9 @@ pub enum ColorMode {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize, Debug, EnumIter, strum_macros::Display, Default, FromRepr)]
 #[repr(u8)]
 pub enum ColorSkin {
-    #[default]
     #[strum(to_string = "One color")]
     OneColor,
+    #[default]
     #[strum(to_string = "Two colors")]
     TwoColor,
     #[strum(to_string = "Four colors")]
