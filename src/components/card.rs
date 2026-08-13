@@ -25,6 +25,8 @@ pub fn CardComponent<C: PartialEq + Clone + 'static, S: SkinTrait<C> + 'static>(
     onclick: EventHandler<MouseEvent>,
     #[props(default)]
     ondoubleclick: EventHandler<MouseEvent>,
+    #[props(default)]
+    disabled: bool,
 ) -> Element {
     let pt = width / 12.;
     let pt = |x: f32| {
@@ -38,7 +40,7 @@ pub fn CardComponent<C: PartialEq + Clone + 'static, S: SkinTrait<C> + 'static>(
                 position: "absolute",
                 top: rem(position.y),
                 left: rem(position.x),
-                background_color: "#fff",
+                background_color: if disabled {"#ccc"} else {"#fff"},
                 width: pt(11.),
                 height: pt(12.),
                 border: "{pt(0.25)} solid #000",

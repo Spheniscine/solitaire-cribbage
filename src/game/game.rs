@@ -53,6 +53,7 @@ impl ScoreBoard {
 }
 
 pub const STACK_LIMIT: u8 = 31;
+pub const SCORE_GOAL: i32 = 61;
 
 impl Board {
     pub fn update_score(&mut self) {
@@ -147,6 +148,12 @@ impl GameState {
         self.undo_stack.clear();
         self.already_won = false;
 
+        // test for display of stack
+        for i in 1..=13 {
+            let card = Card { rank: i, suit: Suit::Spades };
+            self.board.depots[DepotRole::Stack.id(0)].push(card);
+        }
+
         // if !self.is_busy() { LocalStorage.save_game_state(&self); }
     }
 
@@ -160,5 +167,31 @@ impl GameState {
 
     pub fn undo_possible(&self) -> bool {
         self.allow_undo && !self.undo_stack.is_empty()
+    }
+
+    pub fn advance_animations(&mut self, key: AnimationKey) {
+        if key != self.animation_key { return; }
+        self.animation_key = self.animation_key.wrapping_add(1);
+        
+        self.board.advance_actions();
+
+        if self.is_won() {
+            if !self.already_won {
+                self.num_wins += 1;
+                self.already_won = true;
+            }
+        } else {
+            // self.check_auto_moves();
+        }
+
+        // if !self.is_busy() { LocalStorage.save_game_state(&self); }
+    }
+
+    pub fn is_won(&self) -> bool {
+        self.board.score_board.score >= SCORE_GOAL
+    }
+
+    pub fn onclick(&mut self, pos: BoardPos) {
+        // todo
     }
 }

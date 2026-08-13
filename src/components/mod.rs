@@ -4,17 +4,17 @@ pub use utils::*;
 mod card;
 pub use card::*;
 
-// mod skin;
-// pub use skin::*;
+mod skin;
+pub use skin::*;
 
-// mod board;
-// pub use board::*;
+mod board;
+pub use board::*;
 
-// mod anim;
-// pub use anim::*;
+mod anim;
+pub use anim::*;
 
-// mod hero;
-// pub use hero::*;
+mod hero;
+pub use hero::*;
 
 // mod settings;
 // pub use settings::*;
@@ -22,8 +22,8 @@ pub use card::*;
 // mod local_storage;
 // pub use local_storage::LocalStorage;
 
-// mod emoji;
-// pub use emoji::*;
+mod emoji;
+pub use emoji::*;
 
 // mod help;
 // pub use help::*;
