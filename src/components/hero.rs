@@ -108,7 +108,7 @@ pub fn Hero() -> Element {
                     skin: st.skin,
                     onclick: move |pos| if clean {state.write().onclick(pos);},
                     animation_key: st.animation_key,
-                    game_status: crate::game::GameStatus { is_won: false, is_playable: false }, // todo
+                    game_status: st.game_status(),
                 }
             }
 

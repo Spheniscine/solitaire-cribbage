@@ -154,11 +154,11 @@ impl GameState {
         self.undo_stack.clear();
         self.already_won = false;
 
-        // test for display of stack
-        for i in 1..=13 {
-            let card = Card { rank: i, suit: Suit::Spades };
-            self.board.depots[DepotRole::Stack.id(0)].push(card);
-        }
+        // // test for display of stack
+        // for i in 1..=13 {
+        //     let card = Card { rank: i, suit: Suit::Spades };
+        //     self.board.depots[DepotRole::Stack.id(0)].push(card);
+        // }
 
         // if !self.is_busy() { LocalStorage.save_game_state(&self); }
     }
@@ -181,6 +181,9 @@ impl GameState {
         
         self.board.advance_actions();
 
+        self.board.update_score();
+        self.high_score = self.high_score.max(self.board.score_board.score);
+
         if self.is_won() {
             if !self.already_won {
                 self.num_wins += 1;
@@ -189,7 +192,7 @@ impl GameState {
         } else {
             // self.check_auto_moves();
         }
-
+        
         // if !self.is_busy() { LocalStorage.save_game_state(&self); }
     }
 
@@ -204,7 +207,27 @@ impl GameState {
         self.board.score_board.score >= SCORE_GOAL
     }
 
+    fn do_move_raw(&mut self, pos1: BoardPos, pos2: BoardPos) {
+        self.board.do_move(pos1, pos2);
+        self.history.push(ActionRecord { pos1, pos2, score_board: self.board.score_board })
+    }
+
     pub fn onclick(&mut self, pos: BoardPos) {
-        // todo
+        if self.is_busy() { return; }
+        if !self.board.is_playable(pos) { return; }
+
+        let history_len = self.history.len();
+        match DepotRole::role(pos.depot_index).unwrap() {
+            DepotRole::Tableau => {
+                self.do_move_raw(pos, self.board.top_pos(DepotRole::Stack.id(0)));
+            },
+            DepotRole::Stack => { return; },
+            DepotRole::Discard => {
+                self.do_move_raw(BoardPos::new(DepotRole::Stack.id(0), 0), 
+                    self.board.top_pos(DepotRole::Discard.id(0)));
+            },
+        }
+
+        self.undo_stack.push(history_len);
     }
 }
