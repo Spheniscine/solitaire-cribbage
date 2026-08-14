@@ -172,13 +172,13 @@ button {
 .scoreboard table {
     border-spacing: 0;
     border-collapse: collapse;
-    
 }
 .scoreboard td {
     /* padding-top: 1rem; */
-    padding-bottom: 1rem;
+    /* padding-bottom: 1rem; */
     font-size: 3.5rem;
     color: #fff;
+    line-height: 1.5em;
 }
 
 .scoreboard tr.highlight td {
