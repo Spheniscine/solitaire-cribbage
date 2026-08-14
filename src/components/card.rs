@@ -40,7 +40,7 @@ pub fn CardComponent<C: PartialEq + Clone + 'static, S: SkinTrait<C> + 'static>(
                 position: "absolute",
                 top: rem(position.y),
                 left: rem(position.x),
-                background_color: if disabled {"#ccc"} else {"#fff"},
+                background_color: if disabled {"#ddd"} else {"#fff"},
                 width: pt(11.),
                 height: pt(12.),
                 border: "{pt(0.25)} solid #000",

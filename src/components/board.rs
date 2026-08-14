@@ -195,6 +195,19 @@ pub fn BoardComponent(
         }
     };
 
+    let should_disabled_display = |depot: usize, ord: usize| {
+        let (role, index) = DepotRole::role_and_subindex(depot).unwrap();
+        use DepotRole::*;
+        match role {
+            Tableau => 
+                !board.is_playable(BoardPos { depot_index: depot, card_index: ord }),
+            Stack => 
+                false,
+            Discard => 
+                false,
+        }
+    };
+
     let discard_playable = board.is_playable(board.last_pos(DepotRole::Discard.id(0)));
 
     let get_hint = |depot: usize| {
@@ -321,6 +334,7 @@ pub fn BoardComponent(
                         width: card_width,
                         card: if is_face_up(depot) {board.depots[depot][i]},
                         // number_hint: if !is_face_up(depot) {i + 1},
+                        disabled: should_disabled_display(depot, i),
                         skin,
                         onclick: move |_| {
                             onclick.call(BoardPos::new(depot, i))
