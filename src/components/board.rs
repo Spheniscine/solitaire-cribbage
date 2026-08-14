@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use glam::Vec2;
 
-use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DepotRole, NUM_DEPOTS, Skin}};
+use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Emoji, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DepotRole, NUM_DEPOTS, Skin}};
 
 #[component]
 pub fn BoardComponent(
@@ -103,6 +103,30 @@ pub fn BoardComponent(
         }
     });
 
+    let recycle_symbol = if true {
+        let pos = get_pos(DepotRole::Discard.id(0), 0);
+        rsx!{
+            div {
+                position: "absolute",
+                top: rem(pos.y),
+                left: rem(pos.x),
+                width: rem(card_width),
+                height: rem(card_height),
+                display: "flex",
+                align_items: "center",
+                justify_content: "center",
+                pointer_events: "none",
+                font_size: rem(5. / 12. * card_width * 0.99),
+
+                Emoji {
+                    text: "♻️"
+                }
+            }
+        }
+    } else {
+        rsx!{}
+    };
+
     rsx! {
         div {
             position: "absolute",
@@ -134,6 +158,8 @@ pub fn BoardComponent(
                     }
                 }
             }
+
+            {recycle_symbol},
         }
     }
 }
