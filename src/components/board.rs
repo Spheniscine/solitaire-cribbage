@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use glam::Vec2;
 
-use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Emoji, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DepotRole, NUM_DEPOTS, ScoreBoard, Skin}};
+use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Emoji, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DepotRole, NUM_DEPOTS, RankScore, SCORE_GOAL, ScoreBoard, Skin, StackScore}};
 
 #[component]
 pub fn ScoreBoardComponent(
@@ -10,6 +10,22 @@ pub fn ScoreBoardComponent(
     score_board: ScoreBoard,
     high_score: i32,
 ) -> Element {
+    let run_length = match score_board.rank_score {
+        Some(RankScore::Run(x)) => Some(x),
+        _ => None
+    };
+
+    let run_length_text = || rsx! {
+        if let Some(x) = run_length {
+            span {
+                color: "#0f0",
+                "{x}",
+            }
+        } else {
+            "X"
+        }
+    };
+
     rsx! {
         table {
             class: "scoreboard",
@@ -20,7 +36,7 @@ pub fn ScoreBoardComponent(
 
             tr {
                 td {
-                    "Stack Total: 31"
+                    "Stack Total: {score_board.total}"
                 }
             }
 
@@ -31,6 +47,7 @@ pub fn ScoreBoardComponent(
             }
 
             tr {
+                class: if score_board.stack_score == Some(StackScore::Jack) {"highlight"},
                 td {
                     "Jack Starter"
                 }
@@ -40,6 +57,7 @@ pub fn ScoreBoardComponent(
             }
 
             tr {
+                class: if score_board.stack_score == Some(StackScore::Total15) {"highlight"},
                 td {
                     "Stack Total = 15"
                 }
@@ -49,6 +67,7 @@ pub fn ScoreBoardComponent(
             }
 
             tr {
+                class: if score_board.stack_score == Some(StackScore::Total31) {"highlight"},
                 td {
                     "Stack Total = 31"
                 }
@@ -58,6 +77,7 @@ pub fn ScoreBoardComponent(
             }
 
             tr {
+                class: if score_board.rank_score == Some(RankScore::Kind(2)) {"highlight"},
                 td {
                     "Pair"
                 }
@@ -67,6 +87,7 @@ pub fn ScoreBoardComponent(
             }
 
             tr {
+                class: if score_board.rank_score == Some(RankScore::Kind(3)) {"highlight"},
                 td {
                     "Triple"
                 }
@@ -76,6 +97,7 @@ pub fn ScoreBoardComponent(
             }
 
             tr {
+                class: if score_board.rank_score == Some(RankScore::Kind(4)) {"highlight"},
                 td {
                     "Quad"
                 }
@@ -85,11 +107,12 @@ pub fn ScoreBoardComponent(
             }
 
             tr {
+                class: if run_length.is_some() {"highlight"},
                 td {
-                    "Run (length X ≥ 3)"
+                    "Run (length ", {run_length_text()}, " ≥ 3)"
                 }
                 td {
-                    "+X"
+                    "+", {run_length_text()}
                 }
             }
 
@@ -105,7 +128,7 @@ pub fn ScoreBoardComponent(
                     "Score"
                 }
                 td {
-                    "0"
+                    "{score_board.score}"
                 }
             }
             tr {
@@ -114,7 +137,7 @@ pub fn ScoreBoardComponent(
                     "Goal"
                 }
                 td {
-                    "61"
+                    "{SCORE_GOAL}"
                 }
             }
             tr {
@@ -122,7 +145,7 @@ pub fn ScoreBoardComponent(
                     "High score"
                 }
                 td {
-                    "0"
+                    "{high_score}"
                 }
             }
         }
