@@ -200,6 +200,7 @@ pub fn BoardComponent(
         use DepotRole::*;
         match role {
             Tableau => {
+                // grey out if there's an animation from this column
                 let from_this_col = board.animation_acts.get(0).is_some_and(|act| {
                     match act {
                         AnimationAct::Move(_cards, pos1, _pos2) => {
