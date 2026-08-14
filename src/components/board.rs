@@ -20,7 +20,7 @@ pub fn ScoreBoardComponent(
 
             tr {
                 td {
-                    "Total: 31"
+                    "Stack Total: 31"
                 }
             }
 
@@ -32,7 +32,7 @@ pub fn ScoreBoardComponent(
 
             tr {
                 td {
-                    "Jack starter"
+                    "Jack Starter"
                 }
                 td {
                     "+2"
@@ -41,7 +41,7 @@ pub fn ScoreBoardComponent(
 
             tr {
                 td {
-                    "Total = 15"
+                    "Stack Total = 15"
                 }
                 td {
                     "+2"
@@ -50,7 +50,7 @@ pub fn ScoreBoardComponent(
 
             tr {
                 td {
-                    "Total = 31"
+                    "Stack Total = 31"
                 }
                 td {
                     "+2"
