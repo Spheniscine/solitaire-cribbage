@@ -47,14 +47,18 @@ pub fn BoardComponent(
         }
     };
 
+    let discard_playable = true; //todo
+
     let get_hint = |depot: usize| {
         let role = DepotRole::role(depot).unwrap();
         match role {
             DepotRole::Discard => Some(
                     rsx!{
-                        span {
-                            font_family: "'Noto Emoji'",
-                            "♻"
+                        if !discard_playable {
+                            span {
+                                font_family: "'Noto Emoji'",
+                                "♻"
+                            }
                         }
                     }
                 ),
@@ -103,7 +107,7 @@ pub fn BoardComponent(
         }
     });
 
-    let recycle_symbol = if true {
+    let recycle_symbol = if discard_playable {
         let pos = get_pos(DepotRole::Discard.id(0), 0);
         rsx!{
             div {
@@ -116,11 +120,12 @@ pub fn BoardComponent(
                 align_items: "center",
                 justify_content: "center",
                 pointer_events: "none",
-                font_size: rem(5. / 12. * card_width * 0.99),
+                font_size: rem(5. / 12. * card_width),
+                color: "#0f0",
+                font_family: "'Noto Emoji'",
+                font_weight: "bold",
 
-                Emoji {
-                    text: "♻️"
-                }
+                "♻"
             }
         }
     } else {
@@ -160,6 +165,7 @@ pub fn BoardComponent(
             }
 
             {recycle_symbol},
+            {anims},
         }
     }
 }
