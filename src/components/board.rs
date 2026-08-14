@@ -1,7 +1,121 @@
 use dioxus::prelude::*;
 use glam::Vec2;
 
-use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Emoji, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DepotRole, NUM_DEPOTS, Skin}};
+use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Emoji, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DepotRole, NUM_DEPOTS, ScoreBoard, Skin}};
+
+#[component]
+pub fn ScoreBoardComponent(
+    position: Vec2,
+    width: f32,
+    score_board: ScoreBoard,
+    high_score: i32,
+) -> Element {
+    rsx! {
+        table {
+            class: "scoreboard",
+            position: "absolute",
+            left: rem(position.x),
+            top: rem(position.y),
+            width: rem(width),
+
+            tr {
+                td {
+                    "Jack starter"
+                }
+                td {
+                    "+2"
+                }
+            }
+
+            tr {
+                td {
+                    "Total = 15"
+                }
+                td {
+                    "+2"
+                }
+            }
+
+            tr {
+                td {
+                    "Total = 31"
+                }
+                td {
+                    "+2"
+                }
+            }
+
+            tr {
+                td {
+                    "Pair"
+                }
+                td {
+                    "+2"
+                }
+            }
+
+            tr {
+                td {
+                    "Triple"
+                }
+                td {
+                    "+6"
+                }
+            }
+
+            tr {
+                td {
+                    "Quad"
+                }
+                td {
+                    "+12"
+                }
+            }
+
+            tr {
+                td {
+                    "Run (length X ≥ 3)"
+                }
+                td {
+                    "+X"
+                }
+            }
+
+            tr {
+                td {
+                    " "
+                }
+            }
+
+            tr {
+                class: "highlight",
+                td {
+                    "Score"
+                }
+                td {
+                    "0"
+                }
+            }
+            tr {
+                class: "highlight",
+                td {
+                    "Goal"
+                }
+                td {
+                    "61"
+                }
+            }
+            tr {
+                td {
+                    "High score"
+                }
+                td {
+                    "0"
+                }
+            }
+        }
+    }
+}
 
 #[component]
 pub fn BoardComponent(
@@ -107,6 +221,18 @@ pub fn BoardComponent(
         }
     });
 
+    let score_board_pos = Vec2::new(margin_x, pos_y(1));
+    let score_board_width = get_pos(DepotRole::Tableau.id(0), 0).x - spacer_x - score_board_pos.x;
+    let score_board = rsx! {
+        ScoreBoardComponent { 
+            position: score_board_pos,
+            width: score_board_width,
+            score_board: board.score_board,
+            high_score,
+        }
+    };
+    
+
     let recycle_symbol = if discard_playable {
         let pos = get_pos(DepotRole::Discard.id(0), 0);
         rsx!{
@@ -164,6 +290,7 @@ pub fn BoardComponent(
                 }
             }
 
+            {score_board},
             {recycle_symbol},
             {anims},
         }

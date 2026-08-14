@@ -13,7 +13,7 @@ html {
 
 body {
     background-color: #0f1116;
-    font-family: "Noto Sans", sans-serif;
+    font-family: "Noto Sans", 'Noto Sans Math', sans-serif;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -169,10 +169,26 @@ button {
    width: 1px;
 }
 
-/* .crop-shape-reminder table {
+.scoreboard table {
     border-spacing: 0;
     border-collapse: collapse;
+    
 }
-.crop-shape-reminder td {
-    padding: 0;
-} */
+.scoreboard td {
+    /* padding-top: 1rem; */
+    padding-bottom: 1rem;
+    font-size: 3.5rem;
+    color: #fff;
+}
+
+.scoreboard tr.highlight td {
+    /* padding-top: 1rem; */
+    font-weight: bold;
+    color: #ff0;
+}
+.scoreboard td:nth-child(1) {
+    text-align: left;
+}
+.scoreboard td:nth-child(2) {
+    text-align: right;
+}
