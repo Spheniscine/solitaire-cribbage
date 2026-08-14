@@ -217,7 +217,8 @@ pub fn BoardComponent(
         }
     };
 
-    let discard_playable = board.is_playable(board.last_pos(DepotRole::Discard.id(0)));
+    let discard_playable = board.animation_acts.is_empty() && 
+        board.is_playable(board.last_pos(DepotRole::Discard.id(0)));
 
     let get_hint = |depot: usize| {
         let role = DepotRole::role(depot).unwrap();

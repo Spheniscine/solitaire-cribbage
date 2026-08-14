@@ -199,7 +199,8 @@ impl GameState {
     pub fn game_status(&self) -> GameStatus {
         GameStatus {
             is_won: self.is_won(),
-            is_playable: DepotRole::Tableau.range().any(|i| !self.board.depots[i].is_empty()),
+            is_playable: self.is_busy() ||
+                DepotRole::Tableau.range().any(|i| !self.board.depots[i].is_empty()),
         }
     }
 
