@@ -109,6 +109,7 @@ pub fn Hero() -> Element {
                     onclick: move |pos| if clean {state.write().onclick(pos);},
                     animation_key: st.animation_key,
                     game_status: st.game_status(),
+                    high_score: st.high_score,
                 }
             }
 
