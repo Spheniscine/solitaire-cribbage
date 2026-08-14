@@ -20,6 +20,18 @@ pub fn ScoreBoardComponent(
 
             tr {
                 td {
+                    "Total: 31"
+                }
+            }
+
+            tr {
+                td {
+                    " "
+                }
+            }
+
+            tr {
+                td {
                     "Jack starter"
                 }
                 td {
