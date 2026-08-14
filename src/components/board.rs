@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use glam::Vec2;
 
-use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Emoji, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DepotRole, NUM_DEPOTS, RankScore, SCORE_GOAL, ScoreBoard, Skin, StackScore}};
+use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Emoji, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DECK_SIZE, DepotRole, GameStatus, NUM_DEPOTS, RankScore, SCORE_GOAL, ScoreBoard, Skin, StackScore}};
 
 #[component]
 pub fn ScoreBoardComponent(
@@ -161,8 +161,7 @@ pub fn BoardComponent(
     onclick: EventHandler<BoardPos>,
     #[props(default)]
     animation_key: AnimationKey,
-    #[props(default)]
-    is_won: bool,
+    game_status: GameStatus,
     #[props(default)]
     high_score: i32,
 ) -> Element {
@@ -196,7 +195,7 @@ pub fn BoardComponent(
         }
     };
 
-    let discard_playable = true; //todo
+    let discard_playable = board.is_playable(board.last_pos(DepotRole::Discard.id(0)));
 
     let get_hint = |depot: usize| {
         let role = DepotRole::role(depot).unwrap();
@@ -293,6 +292,11 @@ pub fn BoardComponent(
         rsx!{}
     };
 
+    let game_status_y = || {
+        get_pos(DepotRole::Tableau.id(0), DECK_SIZE / DepotRole::Tableau.number_of() - 1).y
+            + card_height + spacer_y
+    };
+
     rsx! {
         div {
             position: "absolute",
@@ -328,6 +332,46 @@ pub fn BoardComponent(
             {score_board},
             {recycle_symbol},
             {anims},
+
+            if game_status.is_won {
+                div {
+                    position: "absolute",
+                    top: rem(game_status_y()),
+                    left: rem(17.5),
+                    width: rem(59.),
+                    background_color: "#505",
+                    padding: rem(3.),
+                    color: "#fff",
+                    font_size: rem(7.),
+                    border_radius: rem(2.),
+                    text_align: "center",
+                    "YOU WIN!",
+                    if game_status.is_playable {
+                        p {
+                            font_size: rem(3.),
+                            "You may keep playing for a high score."
+                        }
+                    }
+                }
+            } else if !game_status.is_playable {
+                div {
+                    position: "absolute",
+                    top: rem(game_status_y()),
+                    left: rem(17.5),
+                    width: rem(59.),
+                    background_color: "#000",
+                    padding: rem(3.),
+                    color: "#fff",
+                    font_size: rem(7.),
+                    border_radius: rem(2.),
+                    text_align: "center",
+                    "GAME OVER",
+                    p {
+                        font_size: rem(3.),
+                        "You didn’t score enough to meet the goal."
+                    }
+                }
+            }
         }
     }
 }

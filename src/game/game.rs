@@ -55,12 +55,18 @@ impl ScoreBoard {
 pub const STACK_LIMIT: u8 = 31;
 pub const SCORE_GOAL: i32 = 61;
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct GameStatus {
+    pub is_won: bool,
+    pub is_playable: bool,
+}
+
 impl Board {
     pub fn update_score(&mut self) {
         self.score_board.score(&self.depots[DepotRole::Stack.id(0)]);
     }
     pub fn is_playable(&self, pos: BoardPos) -> bool {
-        let Some((role, index)) = DepotRole::role_and_subindex(pos.depot_index) else {return false};
+        let Some(role) = DepotRole::role(pos.depot_index) else {return false};
         match role {
             DepotRole::Tableau => {
                 let depot = &self.depots[pos.depot_index];
@@ -185,6 +191,13 @@ impl GameState {
         }
 
         // if !self.is_busy() { LocalStorage.save_game_state(&self); }
+    }
+
+    pub fn game_status(&self) -> GameStatus {
+        GameStatus {
+            is_won: self.is_won(),
+            is_playable: DepotRole::Tableau.range().any(|i| !self.board.depots[i].is_empty()),
+        }
     }
 
     pub fn is_won(&self) -> bool {
