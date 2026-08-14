@@ -196,11 +196,19 @@ pub fn BoardComponent(
     };
 
     let should_disabled_display = |depot: usize, ord: usize| {
-        let (role, index) = DepotRole::role_and_subindex(depot).unwrap();
+        let role = DepotRole::role(depot).unwrap();
         use DepotRole::*;
         match role {
-            Tableau => 
-                !board.is_playable(BoardPos { depot_index: depot, card_index: ord }),
+            Tableau => {
+                let from_this_col = board.animation_acts.get(0).is_some_and(|act| {
+                    match act {
+                        AnimationAct::Move(_cards, pos1, _pos2) => {
+                            pos1.depot_index == depot
+                        },
+                    }
+                });
+                from_this_col || !board.is_playable(BoardPos { depot_index: depot, card_index: ord })
+            },
             Stack => 
                 false,
             Discard => 
