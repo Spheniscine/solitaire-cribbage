@@ -49,7 +49,7 @@ pub fn ScoreBoardComponent(
             tr {
                 class: if score_board.stack_score == Some(StackScore::Jack) {"highlight"},
                 td {
-                    "Jack Starter"
+                    "Jack First"
                 }
                 td {
                     "+2"
