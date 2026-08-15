@@ -4,7 +4,7 @@ use rand::{Rng, seq::SliceRandom};
 use strum::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
 
-use crate::{components::LocalStorage, game::{BitMask, Board, BoardPos, Card, DECK_SIZE, DepotRole, RANK_JACK, RANKS, RankScore, ScoreBoard, Skin, Suit}};
+use crate::{components::LocalStorage, game::{BitMask, Board, BoardPos, Card, DECK_SIZE, DepotRole, RANK_JACK, RANKS, RankScore, ScoreBoard, SettingsState, Skin, Suit}};
 
 use super::StackScore;
 
@@ -251,5 +251,18 @@ impl GameState {
         self.undo_stack.clear();
 
         if !self.is_busy() { LocalStorage.save_game_state(&self); }
+    }
+
+    pub fn new_settings_state(&self) -> SettingsState {
+        SettingsState {
+            allow_undo: self.allow_undo,
+            skin: self.skin,
+        }
+    }
+
+    pub fn apply_settings(&mut self, settings: &SettingsState){
+        self.allow_undo = settings.allow_undo;
+        self.skin = settings.skin;
+        LocalStorage.save_game_state(&self);
     }
 }

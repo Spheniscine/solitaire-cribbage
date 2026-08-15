@@ -13,5 +13,5 @@ pub use board::*;
 mod game;
 pub use game::*;
 
-// mod settings;
-// pub use settings::*;
+mod settings;
+pub use settings::*;
