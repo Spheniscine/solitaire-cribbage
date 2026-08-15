@@ -56,9 +56,6 @@ impl<'de> Deserialize<'de> for Suit {
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
-pub enum SuitColor { Black, Red }
-
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Card {
     pub rank: u8,
     pub suit: Suit, 

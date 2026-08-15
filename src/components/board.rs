@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use glam::Vec2;
 
-use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Emoji, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DECK_SIZE, DepotRole, GameStatus, NUM_DEPOTS, RankScore, SCORE_GOAL, ScoreBoard, Skin, StackScore}};
+use crate::{components::{CARD_HEIGHT_RATIO, CardComponent, CardFrame, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DECK_SIZE, DepotRole, GameStatus, NUM_DEPOTS, RankScore, SCORE_GOAL, ScoreBoard, Skin, StackScore}};
 
 #[component]
 pub fn ScoreBoardComponent(

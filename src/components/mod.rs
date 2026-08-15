@@ -5,7 +5,7 @@ mod card;
 pub use card::*;
 
 mod skin;
-pub use skin::*;
+// pub use skin::*;
 
 mod board;
 pub use board::*;
@@ -25,8 +25,8 @@ pub use local_storage::LocalStorage;
 mod emoji;
 pub use emoji::*;
 
-// mod help;
-// pub use help::*;
+mod help;
+pub use help::*;
 
-// mod videos;
-// pub use videos::*;
+mod videos;
+pub use videos::*;
