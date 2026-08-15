@@ -169,13 +169,13 @@ button {
    width: 1px;
 }
 
-.scoreboard table {
+table.scoreboard {
     border-spacing: 0;
     border-collapse: collapse;
 }
 .scoreboard td {
     /* padding-top: 1rem; */
-    /* padding-bottom: 1rem; */
+    padding-bottom: 0.5rem;
     font-size: 3.75rem;
     color: #fff;
     line-height: 1.5em;
