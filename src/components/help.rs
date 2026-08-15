@@ -89,7 +89,7 @@ pub fn Help(mut game_state: Signal<GameState>) -> Element {
                         li {
                             Emph{"Run"},
                             ": The frontmost cards of the stack form a set of ",
-                            Emph {"at least 3"},
+                            Emph {"3 or more"},
                             " consecutive ranks, in any order, such as ",
                             {join_ranks(&skin, [RANK_KING, RANK_JACK, RANK_QUEEN], rsx!{"–"})},
                             " or ",
