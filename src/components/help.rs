@@ -65,8 +65,8 @@ pub fn Help(mut game_state: Signal<GameState>) -> Element {
                 }
 
                 p {
-                    "The ",Emph{"stack total"}," is always tracked, and is the sum of the values of the cards in the stack ("
-                    ,{rank_text(1)}," = 1, ",{join_ranks(&skin, RANK_JACK..=RANK_KING, rsx!{"/"})}," = 10). The total can ",
+                    "The ",Emph{"stack total"}," is the sum of the values of the cards in the stack (",{rank_text(1)},
+                    " has value 1, ",{join_ranks(&skin, RANK_JACK..=RANK_KING, rsx!{"/"})}," have value 10). The total can ",
                     Emph{"never exceed 31"},"."
                 }
 
