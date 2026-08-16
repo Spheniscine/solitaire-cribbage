@@ -392,7 +392,7 @@ pub fn BoardComponent(
                     "GAME OVER",
                     p {
                         font_size: rem(3.),
-                        "You didn’t score enough to meet the goal."
+                        "You didn’t score enough points."
                     }
                 }
             }
