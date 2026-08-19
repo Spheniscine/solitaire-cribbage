@@ -38,6 +38,7 @@ fn App() -> Element {
         document::Link { rel: "icon", href: FAVICON }
         
         document::Style {
+            // visibility hidden to prevent FOUC, is set back to visible in MAIN_CSS
             r#"
             html {{
                 visibility: hidden;
