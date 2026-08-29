@@ -39,26 +39,24 @@ fn App() -> Element {
             rel: "stylesheet",
         }
         document::Link { rel: "icon", href: FAVICON }
-        
-        document::Style {
-            // // visibility hidden to prevent FOUC, is set back to visible in MAIN_CSS
-            if !STATIC_CSS {
-                r#"
+
+        if !STATIC_CSS {
+            // visibility hidden to prevent FOUC, is set back to visible in MAIN_CSS
+            document::Style {r#"
                 html {{
                     visibility: hidden;
                 }}
-                "#,
-            }
-
-            r#"
+            "#,}
+        }
+        
+        document::Style {r#"
             @font-face {{
                 font-family: KaTeX_Suits;
                 font-style: normal;
                 font-weight: 700;
                 src: url({KATEX_SUITS}) format("woff2");
             }} 
-            "#,
-        }
+        "#,}
         if STATIC_CSS {
             document::Style { {MAIN_CSS_STR} }
         } else {
