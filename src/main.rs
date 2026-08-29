@@ -14,6 +14,7 @@ const STATIC_CSS: bool = !cfg!(debug_assertions);
 
 const MAIN_CSS: Asset = asset!("/assets/main.css");
 const MAIN_CSS_STR: &str = const_css_minify::minify!("../assets/main.css");
+const _: &str = include_str!("../assets/main.css");
 
 mod game;
 mod components;
