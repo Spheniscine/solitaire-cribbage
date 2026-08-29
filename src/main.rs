@@ -10,7 +10,7 @@ const KATEX_SUITS: Asset = asset!("/assets/KaTeX_Suits.woff2");
 // from https://www.confettijs.org/
 const CONFETTI_JS: Asset = asset!("/assets/confetti.min.js");
 
-const STATIC_CSS: bool = true;
+const STATIC_CSS: bool = !cfg!(debug_assertions);
 
 const MAIN_CSS: Asset = asset!("/assets/main.css");
 const MAIN_CSS_STR: &str = const_css_minify::minify!("../assets/main.css");
