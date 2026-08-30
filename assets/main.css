@@ -4,7 +4,6 @@
 
 html {
     font-size: min(1svw, 0.5625svh);
-    visibility: visible;
 }
 
 .select-none {
@@ -29,6 +28,7 @@ body {
 }
 
 #hero {
+    visibility: visible;
     position: relative;
     background-color: #031;
     margin: 0;

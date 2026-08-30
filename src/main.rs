@@ -10,11 +10,7 @@ const KATEX_SUITS: Asset = asset!("/assets/KaTeX_Suits.woff2");
 // from https://www.confettijs.org/
 const CONFETTI_JS: Asset = asset!("/assets/confetti.min.js");
 
-const STATIC_CSS: bool = !cfg!(debug_assertions);
-
 const MAIN_CSS: Asset = asset!("/assets/main.css");
-const MAIN_CSS_STR: &str = const_css_minify::minify!("../assets/main.css");
-const _: &str = include_str!("../assets/main.css"); // ensures recompilation if CSS changed
 
 mod game;
 mod components;
@@ -50,17 +46,13 @@ fn App() -> Element {
             }} 
         "#,}
         
-        if STATIC_CSS {
-            document::Style { {MAIN_CSS_STR} }
-        } else {
-            // visibility hidden to prevent FOUC, is set back to visible in MAIN_CSS
-            document::Style {r#"
-                html {{
-                    visibility: hidden;
-                }}
-            "#,}
-            document::Link { href: MAIN_CSS, rel: "stylesheet" }
-        }
+        // visibility hidden to prevent FOUC, is set back to visible in MAIN_CSS
+        document::Style {r#"
+            #hero {{
+                visibility: hidden;
+            }}
+        "#,}
+        document::Link { href: MAIN_CSS, rel: "stylesheet" }
         
         document::Script { src: CONFETTI_JS }
         Hero {}
