@@ -79,15 +79,10 @@ body {
     }
 }
 
-.selected-halo {
+/* .selected-halo {
     background-color: #ff0; 
     box-shadow: 0 0 1rem 1rem #ff0;
-}
-
-.selected-halo-valid {
-    background-color: #0f0; 
-    box-shadow: 0 0 1rem 1rem #0f0;
-}
+} */
 
 #settingsDialog {
     margin: 2.5%; 
